@@ -7,12 +7,6 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 5f;
     public Rigidbody rb;
     public CharacterController controller;
-
-    public Transform bandeja;
-    
-    public float bandejaRotationSpeed = 100f;
-
-    public float maxBandejaRotation = 25f;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,96 +20,11 @@ public class PlayerMovement : MonoBehaviour
         float z_input = Input.GetAxis("Vertical");
         
         Vector3 movement = new Vector3(x_input, 0, z_input);
-        // controller.Move(movement * speed * Time.deltaTime);
+        controller.Move(movement * speed * Time.deltaTime);
         // rb.MovePosition( transform.position + movement * speed * Time.deltaTime);
-        transform.Translate(movement * speed * Time.deltaTime);
-
-
-        if (z_input == 0)
-        {
-            // volver a la inclinacion 0 de x
-            float x_angle = WrapAngle(bandeja.localEulerAngles.x);
-            if (x_angle > 0.5)
-            {
-                bandeja.Rotate(Vector3.left * Time.deltaTime * bandejaRotationSpeed);
-            }
-            else if(x_angle < -0.5)
-            {
-                bandeja.Rotate(Vector3.right * Time.deltaTime * bandejaRotationSpeed);
-            }
-        }
-        else
-        {
-            
-            float x_angle = WrapAngle(bandeja.localEulerAngles.x);
-            if (x_angle >= maxBandejaRotation && z_input > 0)
-            {
-                bandeja.localEulerAngles = new Vector3( UnwrapAngle(maxBandejaRotation),0, bandeja.localEulerAngles.z);
-            }
-            else if(x_angle <= -maxBandejaRotation && z_input < 0)
-            {
-                bandeja.localEulerAngles = new Vector3( UnwrapAngle(-maxBandejaRotation),0, bandeja.localEulerAngles.z);
-            }
-            else
-            {
-                Vector3 newRotation = new Vector3(z_input,0,0);
-                bandeja.Rotate(newRotation * Time.deltaTime * bandejaRotationSpeed);
-            }
-        }
-        if (x_input == 0)
-        {
-            // volver a la inclinacion 0 de z
-            float z_angle = WrapAngle(bandeja.localEulerAngles.z);
-            if (z_angle > 0.5)
-            {
-                bandeja.Rotate(Vector3.back * Time.deltaTime * bandejaRotationSpeed);
-            }
-            else if(z_angle < -0.5)
-            {
-                bandeja.Rotate(Vector3.forward * Time.deltaTime * bandejaRotationSpeed);
-            }
-        }
-        else
-        {
-            float z_angle = WrapAngle(bandeja.localEulerAngles.z);
-            // float x_angle = WrapAngle(bandeja.localEulerAngles.x);
-            if (z_angle >= maxBandejaRotation && x_input > 0)
-            {
-                bandeja.localEulerAngles = new Vector3(bandeja.localEulerAngles.x,0,UnwrapAngle(maxBandejaRotation) );
-            }
-            else if (z_angle <= -maxBandejaRotation && x_input < 0)
-            {
-                bandeja.localEulerAngles = new Vector3(bandeja.localEulerAngles.x,0, UnwrapAngle(-maxBandejaRotation) );
-            }
-            else
-            {
-                Vector3 newRotation = new Vector3(0,0,x_input);
-                bandeja.Rotate(newRotation * Time.deltaTime * bandejaRotationSpeed);
-            }
-        }
-        
-        // bandeja.rotation = Quaternion.Euler(bandejaRotation * bandejaRotationSpeed);
-        
+        //transform.Translate(movement * speed * Time.deltaTime);
         
     }
     
     
-    private static float WrapAngle(float angle)
-    {
-        angle%=360;
-        if(angle >180)
-            return angle - 360;
-
-        return angle;
-    }
-
-    private static float UnwrapAngle(float angle)
-    {
-        if(angle >=0)
-            return angle;
-
-        angle = -angle%360;
-
-        return 360-angle;
-    }
 }
