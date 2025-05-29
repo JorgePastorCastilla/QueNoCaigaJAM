@@ -66,11 +66,11 @@ public class BandejaTilting : MonoBehaviour
         {
             float z_angle = WrapAngle(transform.localEulerAngles.z);
             // float x_angle = WrapAngle(bandeja.localEulerAngles.x);
-            if (z_angle >= maxBandejaRotation && x_input > 0)
+            if (z_angle >= maxBandejaRotation && x_input < 0)
             {
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,0,UnwrapAngle(maxBandejaRotation) );
             }
-            else if (z_angle <= -maxBandejaRotation && x_input < 0)
+            else if (z_angle <= -maxBandejaRotation && x_input > 0)
             {
                 transform.localEulerAngles = new Vector3(transform.localEulerAngles.x,0, UnwrapAngle(-maxBandejaRotation) );
             }

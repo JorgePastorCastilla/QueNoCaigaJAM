@@ -15,7 +15,10 @@ public class itemMovement : MonoBehaviour
     public float delayMovement = 0.1f;
     public float lastTimeMoved = 0;
 
+    public Vector3 lastPosition;
+    public bool onBandeja = false;
     
+    public GameManager gameManager;
     void Start()
     {
         // lastPlayerPos = player.position;
@@ -42,45 +45,29 @@ public class itemMovement : MonoBehaviour
                 isMoving = false;
             }
         }
-
-        if (isMoving)
+        
+        if (isMoving && onBandeja)
         {
             lastTimeMoved = Time.time;
+            // if (player.position.x == lastPosition.x)
+            // {
+            //     x_input = 0;
+            // }
+            // if (player.position.z == lastPosition.z)
+            // {
+            //     z_input = 0;
+            // }
             Vector3 movement = new Vector3(x_input, 0, z_input);
-            transform.Translate(movement * speed * Time.deltaTime);
+            transform.Translate(movement * speed * Time.deltaTime, Space.World);
         }
+        lastPosition = player.position;
+        
     }
 
     public bool CooldownReady()
     {
         return Time.time - lastTimeMoved > delayMovement;
     }
-    public IEnumerator StartMovement()
-    {
-        yield return new WaitForSeconds(delayMovement);
-        isMoving = true;
-        StopAllCoroutines();
-    }
-    public IEnumerator StopMovement()
-    {
-        yield return new WaitForSeconds(delayMovement);
-        isMoving = false;
-        StopAllCoroutines();
-    }
-
-
-    // Update is called once per frame
-    /*void Update()
-    {
-        if (onBandeja)
-        {
-            Vector3 playerMove = player.position - lastPlayerPos;
-            transform.Translate(playerMove);
-            lastPlayerPos = player.position; 
-        }
-        
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Bandeja")
@@ -94,6 +81,7 @@ public class itemMovement : MonoBehaviour
         if (other.gameObject.tag == "Bandeja")
         {
             onBandeja = false;
+            gameManager.GameOver();
         }
-    }*/
+    }
 }
